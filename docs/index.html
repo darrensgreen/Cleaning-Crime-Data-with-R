@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Darren Green">
-<meta name="dcterms.date" content="2025-09-07">
+<meta name="dcterms.date" content="2025-09-10">
 
 <title>A Guide to Crime Data Cleaning &amp; Preparation in RStudio – Cleaning Crime Data with R</title>
 <style>
@@ -185,7 +185,7 @@ div.csl-indent {
   <li><a href="#create-conditional-columns" id="toc-create-conditional-columns" class="nav-link" data-scroll-target="#create-conditional-columns">Create Conditional Columns</a></li>
   <li><a href="#select-columns-and-filter-rows" id="toc-select-columns-and-filter-rows" class="nav-link" data-scroll-target="#select-columns-and-filter-rows">Select Columns and Filter Rows</a></li>
   </ul></li>
-  <li><a href="#basic-visualization-with-ggplot2" id="toc-basic-visualization-with-ggplot2" class="nav-link" data-scroll-target="#basic-visualization-with-ggplot2">Basic Visualization with <code>ggplot2</code></a>
+  <li><a href="#basic-visualisation-with-ggplot2" id="toc-basic-visualisation-with-ggplot2" class="nav-link" data-scroll-target="#basic-visualisation-with-ggplot2">Basic Visualisation with <code>ggplot2</code></a>
   <ul class="collapse">
   <li><a href="#a-basic-bar-chart" id="toc-a-basic-bar-chart" class="nav-link" data-scroll-target="#a-basic-bar-chart">A Basic Bar Chart</a></li>
   <li><a href="#a-bar-chart-with-x-and-y-variables" id="toc-a-bar-chart-with-x-and-y-variables" class="nav-link" data-scroll-target="#a-bar-chart-with-x-and-y-variables">A Bar Chart with X and Y Variables</a></li>
@@ -228,7 +228,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 7, 2025</p>
+      <p class="date">September 10, 2025</p>
     </div>
   </div>
   
@@ -242,7 +242,7 @@ div.csl-indent {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Welcome! This guide provides a standard workflow for cleaning, preparing, and exploring crime data using R. After receiving requests to help people to learn R I developed this guide as a supplementary resource, replacing emails with random chunks of code. I have structured this guide based on the order of steps I have found to be effective for me when analysing crime data. Specifically, I have found the following workflow to be most effective;</p>
+<p>Welcome! This guide provides a standard workflow for cleaning, preparing, and exploring crime data using R. After receiving requests to help people learn R, I developed this guide as a supplementary resource, replacing emails containing random chunks of code. I have structured this guide based on the order of steps I have found to be effective for me when analysing crime data. Specifically, I have found the following workflow to be most effective;</p>
 <ol type="1">
 <li><p>Setting up my library and project settings</p></li>
 <li><p>Loading my data</p></li>
@@ -252,25 +252,25 @@ div.csl-indent {
 <li><p>Format column names</p></li>
 <li><p>Format dates</p></li>
 <li><p>Format remaining variables (renaming categorical variables, addressing NA values or ensuring R is recognising numeric variables as numeric)</p></li>
-<li><p>Once the the above steps have been completed my data is suitably structured for creating dummy variables or calculating new variables.</p></li>
+<li><p>Once the above steps have been completed, my data is suitably structured for creating dummy variables or calculating new variables.</p></li>
 </ul></li>
 </ol>
-<p>I have found this workflow to be consistenly relaible for analysing data related to cirme, road safety, offender recidivism, as well as other content obtained online.</p>
+<p>I have found this workflow to be reliable for analysing data related to crime, road safety, offender recidivism, as well as other content obtained online.</p>
 <p>The purpose of this guide is just to get you started and provide a structure that will hopefully assist you in your data cleaning process. This is not a comprehensive or definitive guide. As you proceed through your R journey, you will see that the flexibility and capabilities of R prevent this from being possible in a single guide. I find that I continue to refine and adjust my coding practices as I come across new problems and see how other members of the R community set up their code. Nonetheless, I hope you find this to be a useful starting point.</p>
-<p>You may also note that some of the code I present in this guide is not covered within the text. This has been done in an effort to keep it concise. However, I have added notes to any relevant code. If you would like to know more about any code, copying and pasting it into a common search engine provide more information.</p>
+<p>You may also note that some of the code I present in this guide is not covered within the text. This has been done in an effort to keep it concise. However, I have added notes to any relevant code. If you would like to know more about any code, copying and pasting it into a common search engine provides more information.</p>
 <p>I have structured this guide to allow you to work through each step with your own data set or use the Queensland Police Service (QPS) open dataset, which you can download directly from the <a href="https://www.data.qld.gov.au/dataset/lga_reported_offences_number">Open Data Portal</a> <span class="citation" data-cites="queenslandpoliceservice2022">(<a href="#ref-queenslandpoliceservice2022" role="doc-biblioref">Queensland Police Service 2022</a>)</span>. A copy is also available on the GitHub page associated with this site.</p>
-<p>Finally, some reassurance regarding the safety of your original data. You don’t need to stress about corrupting your data. Unless you explicitly tell R to overwrite your csv file, which requires you call the relevant function and enter the correct arguments, any data manipulation you complete remains within the RStudio IDE.</p>
+<p>Finally, some reassurance regarding the safety of your original data. You don’t need to stress about corrupting your data. Unless you explicitly tell R to overwrite your CSV file, which requires you to call the relevant function and enter the correct arguments, any data manipulation you complete remains within the RStudio IDE.</p>
 <hr>
 </section>
 <section id="starting-your-project" class="level2">
 <h2 class="anchored" data-anchor-id="starting-your-project">Starting Your Project</h2>
-<p>Once you have opened R click on the ‘File’ menu in the top left of your window and select ‘New Project…’. This will open the New Project Wizard.</p>
+<p>Once you have opened R, click on the ‘File’ menu in the top left of your window and select ‘New Project…’. This will open the New Project Wizard.</p>
 <p>Figure 1: New Project Wizard</p>
 <p><img src="images/clipboard-122254317.png" class="img-fluid"></p>
-<p>Select ‘New Directory’. In the next window you are presented with a number of options including Quarto Website (used to create this page), book formats and journal article formats further down. Assuming this is your first project, we will keep things simple and select the top option, ‘New Project’.</p>
+<p>Select ‘New Directory’. In the next window, you are presented with several options, including Quarto Website (used to create this page), book formats and journal article formats further down. Assuming this is your first project, we will keep things simple and select the top option, ‘New Project’.</p>
 <p>Figure 2: New Project Wizard - Project Type Screen</p>
 <p><img src="images/clipboard-1759991545.png" class="img-fluid"></p>
-<p>In the next window create a project name and select the folder you want your project created in.</p>
+<p>In the next window, create a project name and select the folder you want your project created in.</p>
 <p><strong>Note</strong>: In the example below, a project folder called “Cleaning Crime Data with R” will be created within the Websites folder.</p>
 <p>Figure 3: New Project Wizard - Create New Project Screen</p>
 <p><img src="images/clipboard-2758435978.png" class="img-fluid"></p>
@@ -278,19 +278,19 @@ div.csl-indent {
 </section>
 <section id="r-file-types" class="level2">
 <h2 class="anchored" data-anchor-id="r-file-types">R File Types</h2>
-<p>Once you have created your project, you will need to create a file to write your code in. While some projects types (e.g.&nbsp;book) automatically create the files for you it is worth having a basic understanding of the file types available. The most common files I have used are the R Script and Quarto Documents. To create a new file, click on the blank page icon with the green plus symbol in the top left hand corner of your window and select your desired file type.</p>
+<p>Once you have created your project, you will need to create a file to write your code in. While some project types (e.g.&nbsp;book) automatically create the files for you, it is worth having a basic understanding of the file types available. The most common files I have used are the R Script and Quarto Documents. To create a new file, click on the blank page icon with the green plus symbol in the top left-hand corner of your window and select your desired file type.</p>
 <p>Figure 4: Creating a New File Type</p>
 <p><img src="images/clipboard-3033828948.png" class="img-fluid"></p>
 <p>Personally, I have a strong preference for Quarto Documents. My preference is based on several capabilities I have found beneficial to my research and work;</p>
 <ol type="1">
-<li><p>I can break my code into manageable chunks (e.g.&nbsp;load libraries, load data, format data, extract burglary data, summarise burglary data etc), as you will see in this guide.</p></li>
-<li><p>I can make notes to record my decision making and thought process as I progress through my analysis. This website was written using a Quarto template.</p></li>
+<li><p>I can break my code into manageable chunks (e.g.&nbsp;load libraries, load data, format data, extract burglary data, summarise burglary data, etc), as you will see in this guide.</p></li>
+<li><p>I can make notes to record my decision-making and thought process as I progress through my analysis. This website was written using a Quarto template.</p></li>
 <li><p>I can produce a single, self-contained document that includes my code, its output (like tables and plots), and my written analysis. This makes my work fully reproducible and easy to share with others as a polished report, a PDF, or even a website like this one.</p></li>
 </ol>
 </section>
 <section id="adjusting-your-view" class="level2">
 <h2 class="anchored" data-anchor-id="adjusting-your-view">Adjusting Your View</h2>
-<p>If you are not used to markdown format the initial layout may be confronting. Let’s change your view to ‘Visual’ instead of ‘Source’ by clicking the ‘Visual’ button near the top left of your window.</p>
+<p>If you are not used to markdown format, the initial layout may be confronting. Let’s change your view to ‘Visual’ instead of ‘Source’ by clicking the ‘Visual’ button near the top left of your window.</p>
 <p>Figure 5: The Source/Visual Toggle Button</p>
 <p><img src="images/clipboard-3470430110.png" class="img-fluid"></p>
 <p>Figure 6: Source Layout</p>
@@ -300,10 +300,10 @@ div.csl-indent {
 </section>
 <section id="creating-and-labelling-code-chunks" class="level2">
 <h2 class="anchored" data-anchor-id="creating-and-labelling-code-chunks">Creating and Labelling Code Chunks</h2>
-<p>In the next step we will we load the a couple of libraries that contain useful functions to assist you in your data preparation process. Before we do that we have you create a code chunk. In the top right of your window you will see a c with plus symbol to the left of it. Click on this and select the R format. Alternatively, you can use a keyboard shortcut Ctrl+Alt+I.</p>
+<p>In the next step, we will load a couple of libraries that contain useful functions to assist you in your data preparation process. Before we do that, we have you create a code chunk. In the top right of your window, you will see a c with a plus symbol to the left of it. Click on this and select the R format. Alternatively, you can use a keyboard shortcut Ctrl+Alt+I.</p>
 <p>Figure 8: Insert a new code chunk</p>
 <p><img src="images/clipboard-1979597964.png" class="img-fluid"></p>
-<p>A blank code chunk will import where your cursor is placed. It is good practice to give each chunk a unique label by typing <code>#| label: your-unique-label</code> on the line immediately after <code>{r}</code>. Labels must be unique or you will get an error when you render your file. It is also best practice to avoid spaces, this will help you debug where errors occur when rendering your document. In the code chunk below, I have added a label called blank-chunk. To ensure the label is visible to you, I have commented this out by placing a <code>#</code> in front.</p>
+<p>A blank code chunk will import where your cursor is placed. It is good practice to give each chunk a unique label by typing <code>#| label: your-unique-label</code> on the line immediately after <code>{r}</code>. Labels must be unique, or you will get an error when you render your file. It is also best practice to avoid spaces; this will help you debug where errors occur when rendering your document. In the code chunk below, I have added a label called blank-chunk. To ensure the label is visible to you, I have commented this out by placing a <code>#</code> in front.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># #| label: blank-chunk # Deleting the first # will make this a chunk label.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This is where your R code will go.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -311,7 +311,7 @@ div.csl-indent {
 </section>
 <section id="installing-packages" class="level2">
 <h2 class="anchored" data-anchor-id="installing-packages">Installing Packages</h2>
-<p>If this is your first time using R, you will be able to commence formatting and analysing data immediately, using base R commands. However, the true strength of R is realised by using packages. A package contain functions that greatly enhance the user experience. For most data wrangling tasks, the <code>tidyverse</code> is our best friend. Tidyverse is a meta package, that load many of the key packages we will be using, saving you from having to load each one individually. Once you have installed a package on your current device, it is placed in a library for you call whenever you need. You don’t have to install the package every time.</p>
+<p>If this is your first time using R, you will be able to commence formatting and analysing data immediately, using base R commands. However, the true strength of R is realised by using packages. A package contains functions that greatly enhance the user experience. For most data wrangling tasks, the <code>tidyverse</code> is our best friend. Tidyverse is a meta package that loads many of the key packages we will be using, saving you from having to load each one individually. Once you have installed a package on your current device, it is placed in a library for you to call whenever you need. You don’t have to install the package every time.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"explore"</span>)</span>
@@ -323,7 +323,7 @@ div.csl-indent {
 <p>Once you have installed the required packages, during this session or previously, you need to load them using the <code>library()</code> command. Following this guide, you will need to load the required libraries every time you start a new R session.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The 'tidyverse' is a collection of R packages for data science.</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It includes ggplot2 (for data visualization), dplyr (for data manipulation),</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It includes ggplot2 (for data visualisation), dplyr (for data manipulation),</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># readr (for reading data), and more.</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -348,7 +348,7 @@ div.csl-indent {
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>) <span class="co"># Removes scientific notation</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="co"># sets a project wide setting to center plot titles, saving you from having to type this line for every plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Throughout this guide we will cover the functions I use most frequently. However, these only represent a small proportion of the functions available. If you would like to know more about a package, you can try searching for details within common search engines or use the R <code>help()</code> function.</p>
+<p>Throughout this guide, we will cover the functions I use most frequently. However, these only represent a small proportion of the functions available. If you would like to know more about a package, you can try searching for details within common search engines or use the R <code>help()</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(<span class="at">package =</span> <span class="st">"dplyr"</span>) <span class="co"># Part of the tidyverse package</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(<span class="at">package =</span> <span class="st">"lubridate"</span>) <span class="co"># Part of the tidyverse package</span></span>
@@ -360,15 +360,15 @@ div.csl-indent {
 </section>
 <section id="loading-data" class="level2">
 <h2 class="anchored" data-anchor-id="loading-data">Loading Data</h2>
-<p>Getting your data into R is the first step. Crime data often comes in CSV (Comma-Separated Values) files and this will be the focus of this guide.</p>
+<p>Getting your data into R is the first step. Crime data often comes in CSV (Comma-Separated Values) files, and this will be the focus of this guide.</p>
 <section id="loading-a-single-csv-file" class="level3">
 <h3 class="anchored" data-anchor-id="loading-a-single-csv-file">Loading a Single CSV File</h3>
-<p>If your data is in a single CSV file located in your R project’s working directory, you can load it easily with <code>read.csv()</code>. This method provides a sound starting point and is recommended. However, I have provided additional methods I have found to be useful in the following sections. Out of habit I tend to use the base R <code>read.csv()</code> method. However, there is a <code>tidyverse</code> method, specifically <code>readr</code>, that provides additional functionality. For example, the <code>read_csv()</code> method includes the argument <code>trim_ws = TRUE</code> to remove white spaces on either side of strings, saving you formatting time down the track.</p>
-<p>During this initial load, I tend to label my initial dataset ‘raw’ or similar. I then create a copy of the data set when I start formatting, so I can fall back on a pre-loaded dataset without having to load everything all over again. This is useful if you have a reasonably sized dataset to avoid waiting to reload your raw data when you make a formatting mistake (e.g.&nbsp;accidentally deleting all of your date data). However, it can also be problematic when working with very large datasets, taking up memory. Ultimately, I developed this habit when I first started learning R. Often I would import the data once and then start working on it. Then I would make a mistake formatting and transforming my data and would have to start all over again.</p>
+<p>If your data is in a single CSV file located in your R project’s working directory, you can load it easily with <code>read.csv()</code>. This method provides a sound starting point and is recommended. However, I have provided additional methods I have found to be useful in the following sections. Out of habit, I tend to use the base R <code>read.csv()</code> method. However, there is a <code>tidyverse</code> method, specifically <code>readr</code>, that provides additional functionality. For example, the <code>read_csv()</code> method includes the argument <code>trim_ws = TRUE</code> to remove white spaces on either side of strings, saving you formatting time down the track.</p>
+<p>During this initial load, I tend to label my initial dataset ‘raw’ or similar. I then create a copy of the data set when I start formatting, so I can fall back on a pre-loaded dataset without having to load everything all over again. This is useful if you have a reasonably sized dataset to avoid waiting to reload your raw data when you make a formatting mistake (e.g.&nbsp;accidentally deleting all of your date data). However, it can also be problematic when working with very large datasets, taking up memory. Ultimately, I developed this habit when I first started learning R. Often, I would import the data once and then start working on it. Then I would make a mistake formatting and transforming my data, and would have to start all over again.</p>
 </section>
 <section id="loading-a-csv-from-your-project-directory" class="level3">
 <h3 class="anchored" data-anchor-id="loading-a-csv-from-your-project-directory">Loading a CSV from your Project Directory</h3>
-<p>Once you have set up a project you can place your data inside your directory. In this case you can access using this method. However, this won’t work if your data is stored in a central repository outside of your project folder.</p>
+<p>Once you have set up a project, you can place your data inside your directory. In this case, you can access using this method. However, this won’t work if your data is stored in a central repository outside of your project folder.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Base R</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace "your_crime_data.csv" with the actual name of your file.</span></span>
@@ -384,7 +384,7 @@ div.csl-indent {
 </section>
 <section id="loading-a-csv-from-a-specific-directory" class="level3">
 <h3 class="anchored" data-anchor-id="loading-a-csv-from-a-specific-directory">Loading a CSV from a Specific Directory</h3>
-<p>If the file is not in your R project directory, you need to provide the full path to the file. You can do this one of two ways. You can put the entire file path in each line of code or you can leverage the file.path function.</p>
+<p>If the file is not in your R project directory, you need to provide the full path to the file. You can do this one of two ways. You can put the entire file path in each line of code, or you can leverage the <code>file.path()</code> function.</p>
 <section id="option-1" class="level4">
 <h4 class="anchored" data-anchor-id="option-1">Option 1</h4>
 <div class="cell">
@@ -399,7 +399,7 @@ div.csl-indent {
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.path</span>(dir, <span class="st">"your_csv_file_name.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Tip</strong>: A quick way to get your file path is to right click on your file and select ‘Copy Path’. Delete the file name and forward slash (/index.qmd in this example)</p>
+<p><strong>Tip</strong>: A quick way to get your file path is to right-click on your file and select ‘Copy Path’. Delete the file name and forward slash (/index.qmd in this example)</p>
 <p>Figure 9: Obtaining your directory file path</p>
 <p><img src="images/clipboard-1018631641.png" class="img-fluid"></p>
 <p>Copy file path raw: “C:/Users/<em>your_folder</em>/Documents/R Projects/Websites/Cleaning Crime Data with R/index.qmd”</p>
@@ -408,7 +408,7 @@ div.csl-indent {
 </section>
 <section id="loading-multiple-csv-files-at-once" class="level3">
 <h3 class="anchored" data-anchor-id="loading-multiple-csv-files-at-once">Loading Multiple CSV Files at Once</h3>
-<p>Often, data is split across multiple files (e.g., one for each month). You can load and combine them all in one go using the <code>tidyverse</code> <code>map_dfr()</code> function. This code finds all files in a directory that end with <code>.csv</code> and stacks them into a single data frame. You may note that in this code chunk I have used the <code>read_csv()</code> function call. I have done this for the sake of consistency but I have previously used this method, using the <code>read.csv()</code> function.</p>
+<p>Often, data is split across multiple files (e.g., one for each month). You can load and combine them all in one go using the <code>tidyverse</code> <code>map_dfr()</code> function. This code finds all files in a directory that end with <code>.csv</code> and stacks them into a single data frame. You may note that in this code chunk, I have used the <code>read_csv()</code> function call. I have done this for the sake of consistency, but I have previously used this method, using the <code>read.csv()</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Get a list of all CSV files in the "data_folder" directory.</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>files_to_load <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"data_folder/"</span>, <span class="at">pattern =</span> <span class="st">"*.csv"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
@@ -419,7 +419,7 @@ div.csl-indent {
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Read each CSV and combine them into one data frame.</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>all_crime_data <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(files_to_load, read_csv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Warning</strong>: If the column names of your raw data is not in the first row you will need to amend the above code. How you amend this is dependent on the lay out of your raw data and beyond the scope of this guide.</p>
+<p><strong>Warning</strong>: If the column names of your raw data are not in the first row, you will need to amend the above code. How you amend this is dependent on the layout of your raw data and beyond the scope of this guide.</p>
 <hr>
 </section>
 </section>
@@ -436,10 +436,10 @@ div.csl-indent {
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a quick look at the structure of the data</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>You can also double click on your file in the environment window to open it in the RStudio viewer, reviewing just as you would a spreadsheet.</p>
+<p>You can also double-click on your file in the environment window to open it in the RStudio viewer, reviewing just as you would a spreadsheet.</p>
 <p>Figure 10: RStudio Viewer</p>
 <p><img src="images/clipboard-2226418659.png" class="img-fluid"></p>
-<p>A common challenge when dealing with operational data, is the impact of missing and NA values within the dataset. Some functions, such as <code>mean()</code> will not handle NA values unless you explicitly ignore NA values by including an additional argument. Obviously, excluding NA values may adversely impact your data analysis. The <code>skimr</code> package can be very useful for summarising your data and identifying missing values.</p>
+<p>A common challenge when dealing with operational data is the impact of missing and NA values within the dataset. Some functions, such as <code>mean()</code>, will not handle NA values unless you explicitly ignore NA values by including an additional argument. Obviously, excluding NA values may adversely impact your data analysis. The <code>skimr</code> package can be very useful for summarising your data and identifying missing values.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1725,7 +1725,7 @@ div.csl-indent {
 </table>
 </div>
 </div>
-<p>Obviously being a publicly available dataset it has already been cleaned for public consumption. In the next code chunk we will temporarily modify the data set to include missing values and demonstrate the use of the <code>skimr</code> package.</p>
+<p>Obviously, being a publicly available dataset, it has already been cleaned for public consumption. In the next code chunk, we will temporarily modify the data set to include missing values and demonstrate the use of the <code>skimr</code> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a copy of the raw dataset to modify</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> raw</span>
@@ -3022,22 +3022,22 @@ div.csl-indent {
 </table>
 </div>
 </div>
-<p>Notice now that LGA.Name has 20 missing values while Month.Year has none.</p>
-<p><strong>Activity</strong>: Review your data and identify blank cells, NA values other potential issues.</p>
+<p>Notice now that LGA.Name has 20 missing values, while Month.Year has none.</p>
+<p><strong>Activity</strong>: Review your data and identify blank cells, NA values, and other potential issues.</p>
 <hr>
 </section>
 <section id="data-cleaning-and-manipulation" class="level2">
 <h2 class="anchored" data-anchor-id="data-cleaning-and-manipulation">Data Cleaning and Manipulation</h2>
-<p>Now that your raw data has been formatted we can begin to to explore specific components of it. As a general rule, I format the entire data set first because it reduces duplication. If I extract a subset (e.g.&nbsp;burglary offences) and then format that dataset, I will also have to format subsequent datasets, often using the exact code. However, if you create a subset and then decide you want to add or amend a variable for any reason, you can go back to your formatting section, rerun your code and the amendment can be included in your subset data.</p>
+<p>Now that your raw data has been loaded, we can start getting ready for analysis. As a general rule, I format the entire data set first because it reduces duplication. If I extract a subset (e.g.&nbsp;burglary offences) and then format that dataset, I will also have to format subsequent datasets, often using the exact code. However, if you create a subset and then decide you want to add or amend a variable for any reason, you can go back to your formatting section, rerun your code, and the amendment can be included in your subset data.</p>
 <p>This is where we roll up our sleeves and get the data into a usable format. We’ll use functions from the <strong>dplyr</strong> package.</p>
-<p>As noted earlier, I like to leave my raw data as is. To do this I will duplicate the raw data frame (commonly abbreviated as ‘df’) using the below code.</p>
+<p>As noted earlier, I like to leave my raw data as is. To do this, I will duplicate the raw data frame (commonly abbreviated as ‘df’) using the code below.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> raw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="rename-columns" class="level3">
 <h3 class="anchored" data-anchor-id="rename-columns">Rename Columns</h3>
-<p>Column names are often messy. Let’s make them clean and consistent (e.g., lower-case with underscores). You can call single columns, multiple columns consecutively, or explicitly rename columns. The method you use will come down to the dataset/s you have and your personal preferences. Here I present two methods for changing column names. When I started I predominately used the base R <code>colnames()</code> method. I still use the base R method if I need to rename a large number of columns. However, I find I am using the tidyverse method more and more particularly given this allows me to pipe <code>|&gt;</code> (chain together) multiple cleaning functions together (e.g.&nbsp;<code>new_df &lt;- df |&gt; rename() |&gt; mutate(new_date = ...)</code>. Explaining pipes in detail is beyond the scope of this guide but having an understanding that they can improve your workflow as you build your skills is worthwhile.</p>
-<p><strong>Note</strong>: when renaming columns don’t use spaces. This will complicate things down the track. Use <code>snake_case</code> or separate words with ‘<code>.</code>’.</p>
+<p>Column names are often messy. Let’s make them clean and consistent (e.g., lower-case with underscores). You can call single columns, multiple columns consecutively, or explicitly rename columns. The method you use will come down to the dataset/s you have and your personal preferences. Here, I present two methods for changing column names. When I started, I predominantly used the base R <code>colnames()</code> method. I still use the base R method if I need to rename a large number of columns. However, I find I am using the tidyverse method more and more, particularly given that this allows me to pipe <code>|&gt;</code> (chain together) multiple cleaning functions together (e.g.&nbsp;<code>new_df &lt;- df |&gt; rename() |&gt; mutate(new_date = ...)</code>. Explaining pipes in detail is beyond the scope of this guide, but having an understanding that they can improve your workflow as you build your skills is worthwhile.</p>
+<p><strong>Note</strong>: when renaming columns, don’t use spaces. This will complicate things down the track. Use <code>snake_case</code> or separate words with ‘<code>.</code>’.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Tidyverse method</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The syntax is rename(new_name = old_name)</span></span>
@@ -3255,11 +3255,11 @@ div.csl-indent {
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">offence_date =</span> lubridate<span class="sc">::</span><span class="fu">my</span>(my)  <span class="co"># </span></span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Note</strong>: we created a new date variable offence_date.</p>
+<p><strong>Note</strong>: We created a new date variable offence_date.</p>
 </section>
 <section id="create-conditional-columns" class="level3">
 <h3 class="anchored" data-anchor-id="create-conditional-columns">Create Conditional Columns</h3>
-<p>You might need to create new variables based on existing data. A common task is creating an “experimental” vs.&nbsp;“control” group based on a date, or classifying time periods. In this example, we use <code>mutate()</code> combined with the <code>if_else</code> function. I also demonstrate <code>ifelse()</code> function to highlight an alternative method. It is worth noting that <code>if_else()</code> only handles two conditions. For the sake of brevity we won’t cover all of the different options for multiple conditions here. However, if you would like to know how handle the creation of multiple conditions (e.g ‘pre’, ‘during’, ‘post’) look to combined the <code>mutate()</code> and <code>case_when</code> functions.</p>
+<p>You might need to create new variables based on existing data. A common task is creating an “experimental” vs.&nbsp;“control” group based on a date, or classifying time periods. In this example, we use <code>mutate()</code> combined with the <code>if_else</code> function. I also demonstrate <code>ifelse()</code> function to highlight an alternative method. It is worth noting that <code>if_else()</code> only handles two conditions. For the sake of brevity, we won’t cover all of the different options for multiple conditions here. However, if you would like to know how to handle the creation of multiple conditions (e.g ‘pre’, ‘during’, ‘post’), look to combine the <code>mutate()</code> and <code>case_when</code> functions.</p>
 <p>Here, we’ll create a <code>period</code> column to distinguish between data before and after an intervention date (e.g., July 1st, 2020).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now, create the conditional column</span></span>
@@ -3282,12 +3282,12 @@ div.csl-indent {
 <pre><code>[1] "Pre"  "Post"</code></pre>
 </div>
 </div>
-<p><strong>Note</strong>: As I have loaded additional packages to complete various analytical process, I have found that some functions need to be call explicitly from their owning package to work effectively. I have found commonly need to do this for functions from the <code>dplyr</code> package. For example in the code chunk above I have explicitly call the mutate functions by typing <code>dplyr::mutate(...)</code> as opposed to <code>mutate(...)</code>.</p>
+<p><strong>Note</strong>: As I have loaded additional packages to complete various analytical processes, I have found that some functions need to be called explicitly from their owning package to work effectively. I have found that I commonly need to do this for functions from the <code>dplyr</code> package. For example, in the code chunk above, I have explicitly called the mutate functions by typing <code>dplyr::mutate(...)</code> as opposed to <code>mutate(...)</code>.</p>
 <hr>
 </section>
 <section id="select-columns-and-filter-rows" class="level3">
 <h3 class="anchored" data-anchor-id="select-columns-and-filter-rows">Select Columns and Filter Rows</h3>
-<p>You rarely need all the columns or rows from the original dataset or you may want to focus on a subset of your data.</p>
+<p>You rarely need all the columns or rows from the original dataset, or you may want to focus on a subset of your data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's keep only the columns we need and filter for a specific offence type</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>ipswich_lga <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
@@ -3312,9 +3312,9 @@ div.csl-indent {
 </div>
 </section>
 </section>
-<section id="basic-visualization-with-ggplot2" class="level2">
-<h2 class="anchored" data-anchor-id="basic-visualization-with-ggplot2">Basic Visualization with <code>ggplot2</code></h2>
-<p>A picture is worth a thousand words and a fundamental tool for communicating the results of any analytical process. <strong>ggplot2</strong> is definitely my preferred tool for data visualization in R.</p>
+<section id="basic-visualisation-with-ggplot2" class="level2">
+<h2 class="anchored" data-anchor-id="basic-visualisation-with-ggplot2">Basic Visualisation with <code>ggplot2</code></h2>
+<p>A picture is worth a thousand words and is a fundamental tool for communicating the results of any analytical process. <strong>ggplot2</strong> is definitely my preferred tool for data visualisation in R.</p>
 <section id="a-basic-bar-chart" class="level3">
 <h3 class="anchored" data-anchor-id="a-basic-bar-chart">A Basic Bar Chart</h3>
 <p>In our initial example, let’s explore how frequently burglary with violence occurs in Queensland Local Government Areas (LGAs) by visualising the number of recorded offences per month.</p>
@@ -3331,7 +3331,7 @@ div.csl-indent {
 </section>
 <section id="a-bar-chart-with-x-and-y-variables" class="level3">
 <h3 class="anchored" data-anchor-id="a-bar-chart-with-x-and-y-variables">A Bar Chart with X and Y Variables</h3>
-<p>This type of chart is perfect for showing summarised data. You typically create a summary table first then plot that. This is best done using <code>geom_col()</code>.</p>
+<p>This type of chart is perfect for showing summarised data. You typically create a summary table first, then plot that. This is best done using <code>geom_col()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ipswich_lga, <span class="fu">aes</span>(<span class="at">x =</span> offence_date, <span class="at">y =</span> UEWI_dwell_vio)) <span class="sc">+</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
@@ -3352,7 +3352,7 @@ div.csl-indent {
 </section>
 <section id="piped-ggplot" class="level3">
 <h3 class="anchored" data-anchor-id="piped-ggplot">Piped ggplot</h3>
-<p>The code format displayed for ggplot is precisely how I first learnt R. However, as time has progress I have preferred to pipe my data into ggplot, allowing me to include additional pipes to visualise my data without creating another distinct data frame.</p>
+<p>The code format displayed for ggplot is precisely how I first learnt R. However, as time has progressed, I have preferred to pipe my data into ggplot, allowing me to include additional pipes to visualise my data without creating another distinct data frame.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lga <span class="sc">==</span> <span class="st">"Brisbane City Council"</span>) <span class="sc">|&gt;</span> <span class="co"># Added filter to summarise the data for Brisbane, rather than create a new df</span></span>
@@ -3400,7 +3400,7 @@ div.csl-indent {
 </section>
 <section id="aggregating-and-plotting-data-with-pipes" class="level3">
 <h3 class="anchored" data-anchor-id="aggregating-and-plotting-data-with-pipes">Aggregating and Plotting Data with Pipes</h3>
-<p>At the start of this section we created a basic bar chart exploring the frequency of violent burglary counts in LGAs across Queensland. This time we are going to use pipes <code>|&gt;</code> to aggregate violent burglary counts for all of Queensland to visualise the distribution of offence counts across Queensland.</p>
+<p>At the start of this section, we created a basic bar chart exploring the frequency of violent burglary counts in LGAs across Queensland. This time, we are going to use pipes <code>|&gt;</code> to aggregate violent burglary counts for all of Queensland to visualise the distribution of offence counts across Queensland.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(offence_date) <span class="sc">|&gt;</span> <span class="co"># group the data by month year, irrespective of the LGA</span></span>
